@@ -9,6 +9,7 @@
 #include "grid.c"
 #include "paddle.c"
 #include "state.c"
+#include "ball.c"
 
 /*
  *  ERROR HANDLING
@@ -25,13 +26,13 @@ void test () {
     testGrid ();
     grid *g = newGrid (25, 20);
     testPaddle (g);
+    testBall ();
 }
 
 /*
  *  MAIN
  */
-int main (int n, char *args [n]) {
-    
+int main (int n, char *args [n]) {    
     grid *g = newGrid (25, 20);
     state *s = newState (g);
 

@@ -16,3 +16,5 @@ TILE getTileAt (grid *g, uint8_t x, uint8_t y);
 
 uint8_t getWidth (grid *g);
 uint8_t getHeight (grid *g);
+
+bool gridOobCheck (grid *g, uint8_t x, uint8_t y);

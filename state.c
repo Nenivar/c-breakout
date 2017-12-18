@@ -8,6 +8,7 @@
  */
 struct state {
     grid *g;
+    paddle *p;
 };
 typedef struct state state;
 

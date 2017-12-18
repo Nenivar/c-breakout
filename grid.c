@@ -1,4 +1,5 @@
 #include <assert.h>
+#include <stdbool.h>
 #include <malloc.h>
 #include <stdint.h>
 
@@ -22,9 +23,10 @@ typedef struct grid grid;
  *  ERROR HANDLING
  */
 // out of bounds check
-void gridOobCheck (grid *g, uint8_t x, uint8_t y) {
+bool gridOobCheck (grid *g, uint8_t x, uint8_t y) {
     if (!(x>= 0 && x < g->width
-        && y>= 0 && y < g->height)) printf ("fail");
+        && y>= 0 && y < g->height)) return true;
+    return false;
 }
 
 /*

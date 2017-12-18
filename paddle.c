@@ -10,10 +10,12 @@
  */
 
 const int PADDLE_WIDTH = 5;
+const int PADDLE_HEIGHT = 1;
+const int PADDLE_Y = 10;
 
 struct paddle {
     grid *g;
-    uint8_t x;
+    float x;
 };
 typedef struct paddle paddle;
 
@@ -27,14 +29,14 @@ paddle *newPaddle (grid *g) {
     return p;
 }
 
-void movePaddle (paddle *p, uint8_t dx) {
-    uint8_t newLoc = p->x + dx;
+void movePaddle (paddle *p, float dx) {
+    float newLoc = p->x + dx;
 
     if (newLoc >= 0 && (newLoc + PADDLE_WIDTH) < getWidth (p->g))
         p->x = newLoc;
 }
 
-uint8_t getPaddleX (paddle *p) {
+float getPaddleX (paddle *p) {
     return p->x;
 }
 
