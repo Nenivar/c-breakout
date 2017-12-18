@@ -24,8 +24,7 @@ void fail (char *message) {
 void test () {
     testGrid ();
     grid *g = newGrid (25, 20);
-    state *s = newState (g);
-    testPaddle (s);
+    testPaddle (g);
 }
 
 /*
