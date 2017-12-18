@@ -23,3 +23,8 @@ state *newState (grid *g) {
 grid *getGrid (state *s) {
     return s->g;
 }
+
+void freeState (state *s) {
+    free (s->g);
+    free (s);
+}

@@ -7,6 +7,7 @@
 #include "display.h"
 //#include "grid.h"
 #include "grid.c"
+#include "paddle.c"
 #include "state.c"
 
 /*
@@ -22,14 +23,23 @@ void fail (char *message) {
  */
 void test () {
     testGrid ();
+    grid *g = newGrid (25, 20);
+    state *s = newState (g);
+    testPaddle (s);
 }
 
 /*
  *  MAIN
  */
 int main (int n, char *args [n]) {
-    //display ();
+    
+    grid *g = newGrid (25, 20);
+    state *s = newState (g);
+
+    freeState (s);
+
     test ();
+    //display ();
 
     return 1;
 }
