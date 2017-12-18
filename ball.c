@@ -5,6 +5,8 @@
 #include "grid.h"
 #include "paddle.h"
 
+#include "ball.h"
+
 /*
  *  STRUCTURES
  */
@@ -52,7 +54,7 @@ uint8_t getBallVelY (ball *b) {
  *  MOVEMENT
  */
 
-void move (ball *b) {
+static void move (ball *b) {
     int x = b->x + b->velX;
     int y = b->y + b->velY;
 
@@ -61,20 +63,20 @@ void move (ball *b) {
     }
 }
 
-void onGridCollide (ball *b) {
+static void onGridCollide (ball *b) {
     b->velX = -b->velX;
     b->velY = -b->velY;
 }
 
-void onPaddleCollide (ball *b) {
+static void onPaddleCollide (ball *b) {
     // algorithm
 }
 
-bool checkGridCollision (ball *b) {
+static bool checkGridCollision (ball *b) {
     return getTileAt (b->g, b->x, b->y) != AIR;
 }
 
-bool checkPaddleCollision (ball *b) {
+static bool checkPaddleCollision (ball *b) {
     return b->x >= getPaddleX (b->p)
         && b->x <= getPaddleX (b->p) + PADDLE_WIDTH
         && b->y >= PADDLE_Y
@@ -86,6 +88,7 @@ void tick (ball *b, grid *g, paddle *p) {
 
     if (checkGridCollision (b)) onGridCollide (b);
     if (checkPaddleCollision (b)) onPaddleCollide (b);
+    if (b->y < 0);
 }
 
 /*

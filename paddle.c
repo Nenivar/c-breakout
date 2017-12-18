@@ -5,6 +5,8 @@
 #include "state.h"
 #include "grid.h"
 
+#include "paddle.h"
+
 /*
  *  STRUCTURES
  */

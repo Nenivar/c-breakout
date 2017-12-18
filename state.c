@@ -4,6 +4,8 @@
 #include "paddle.h"
 #include "ball.h"
 
+#include "state.h"
+
 /*
  *  STRUCTURES
  */

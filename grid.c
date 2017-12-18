@@ -1,5 +1,4 @@
 #include <assert.h>
-#include <stdbool.h>
 #include <malloc.h>
 #include <stdint.h>
 
@@ -8,31 +7,24 @@
 /*
  *  STRUCTURES
  */
-enum TILE {
-    AIR, WALL, BRICK_RED, BRICK_YLW, BRICK_GRN
-};
-typedef enum TILE TILE;
-
 struct grid {
     uint8_t width, height;
     TILE **map;
 };
-typedef struct grid grid;
 
 /*
  *  ERROR HANDLING
  */
 // out of bounds check
-bool gridOobCheck (grid *g, uint8_t x, uint8_t y) {
+void gridOobCheck (grid *g, uint8_t x, uint8_t y) {
     if (!(x>= 0 && x < g->width
-        && y>= 0 && y < g->height)) return true;
-    return false;
+        && y>= 0 && y < g->height)) fail ("Grid position out of bounds!");
 }
 
 /*
  *  GRID MANIPULATION
  */
-// creates new grid & fills it with AIR
+
 grid *newGrid (uint8_t width, uint8_t height) {
     grid *g = malloc (sizeof (g));
     g->width = width; g->height = height;
@@ -49,35 +41,33 @@ grid *newGrid (uint8_t width, uint8_t height) {
     return g;
 }
 
-// adds a tile at the given x, y pos.
 void setTileAt (grid *g, TILE tile, uint8_t x, uint8_t y) {
     gridOobCheck (g, x, y);
     g->map [x] [y] = tile;
 }
 
-// returns the tile at the given x, y pos.
 TILE getTileAt (grid *g, uint8_t x, uint8_t y) {
     gridOobCheck (g, x, y);
     return g->map [x] [y];
 }
 
-uint8_t getWidth (grid *g) {
+uint8_t getGridWidth (grid *g) {
     return g->width;
 }
 
-uint8_t getHeight (grid *g) {
+uint8_t getGridHeight (grid *g) {
     return g->height;
 }
 
 void freeGrid (grid *g) {
-    for (int i = 0; i < getWidth (g); i++) free (g->map [i]);
+    for (int i = 0; i < getGridWidth (g); i++) free (g->map [i]);
     free (g);
 }
 
 /*
  *  TESTING
  */
-void testGrid () {
+int gridMain () {
     grid *new = newGrid (20, 5);
     assert (new->width == 20);
     assert (new->height == 5);
@@ -93,4 +83,6 @@ void testGrid () {
     assert (getTileAt (new, 9, 2) == BRICK_YLW);
 
     freeGrid (new);
+    succeed ("Grid module OK");
+    return 0;
 }

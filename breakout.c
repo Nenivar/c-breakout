@@ -11,14 +11,6 @@
 #include "ball.c"
 
 /*
- *  ERROR HANDLING
- */
-void fail (char *message) {
-    fprintf (stderr, "%s\n", message);
-    exit (1);
-}
-
-/*
  *  TESTING
  */
 void test () {
