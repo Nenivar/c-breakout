@@ -22,7 +22,7 @@ typedef struct grid grid;
  *  ERROR HANDLING
  */
 // out of bounds check
-void oobCheck (grid *g, uint8_t x, uint8_t y) {
+void gridOobCheck (grid *g, uint8_t x, uint8_t y) {
     if (!(x>= 0 && x < g->width
         && y>= 0 && y < g->height)) printf ("fail");
 }
@@ -49,13 +49,13 @@ grid *newGrid (uint8_t width, uint8_t height) {
 
 // adds a tile at the given x, y pos.
 void setTileAt (grid *g, TILE tile, uint8_t x, uint8_t y) {
-    oobCheck (g, x, y);
+    gridOobCheck (g, x, y);
     g->map [x] [y] = tile;
 }
 
 // returns the tile at the given x, y pos.
 TILE getTileAt (grid *g, uint8_t x, uint8_t y) {
-    oobCheck (g, x, y);
+    gridOobCheck (g, x, y);
     return g->map [x] [y];
 }
 
