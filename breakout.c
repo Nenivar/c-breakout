@@ -5,7 +5,6 @@
 #include <stdio.h>
 
 #include "display.h"
-//#include "grid.h"
 #include "grid.c"
 #include "paddle.c"
 #include "state.c"
@@ -32,14 +31,22 @@ void test () {
 /*
  *  MAIN
  */
-int main (int n, char *args [n]) {    
+void newGame () {
     grid *g = newGrid (25, 20);
-    state *s = newState (g);
+    paddle *p = newPaddle (g);
+    ball *b = newBall (g, p);
+    state *s = newState (g, p, b);
+
+    // tick game
 
     freeState (s);
 
-    test ();
     //display ();
+}
+
+int main (int n, char *args [n]) {    
+    test ();
+    newGame ();
 
     return 1;
 }
