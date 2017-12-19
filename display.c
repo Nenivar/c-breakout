@@ -1,7 +1,9 @@
-#include "display.h"
+// https://csijh.gitlab.io/COMS10008/c/modules/display.c
+// was used for a lot of reference code :)
 
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
+#include "display.h"
 
 const int WIDTH = 640;
 const int HEIGHT = 480;
@@ -41,6 +43,18 @@ void *notNull (void *p) {
 
 display *newDisplay (int width, int height) {
     display *d = malloc (sizeof (display));
+    d->width = width;
+    d->height = height;
+    notNeg (SDL_Init (SDL_INIT_VIDEO));
+    d->window = notNull (SDL_CreateWindow ("Breakout", 100, 100, d->width, d->height, 0));
+    d->surface = notNull (SDL_GetWindowSurface (d->window));
+    
+    return d;
+}
+
+void drawFrame (display *d) {
+    notNeg (SDL_UpdateWindowSurface (d->window));
+    SDL_Delay (20);
 }
 
 /*void display () {
@@ -58,11 +72,18 @@ display *newDisplay (int width, int height) {
     SDL_Quit ();
 }*/
 
+void pause (int ms) {
+    SDL_Delay (ms);
+}
+
 /*
  *  TESTING
  */
 
 int displayMain () {
-    succeed ("Display module OK");
+    display *d = newDisplay (WIDTH, HEIGHT);
+    drawFrame (d);
+    pause (10000);
+
     return 0;
 }

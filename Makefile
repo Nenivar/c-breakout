@@ -13,6 +13,9 @@ paddle:
 ball:
 		$(GCC) -DballMain=main ball.c paddle.c grid.c base.c
 		./breakout
+display:
+		$(GCC) -DdisplayMain=main display.c -lSDL2
+		./breakout
 breakout:
-		$(GCC) breakout.c ball.c paddle.c grid.c base.c
+		$(GCC) breakout.c ball.c paddle.c grid.c base.c -lSDL2
 		./breakout

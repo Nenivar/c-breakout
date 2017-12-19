@@ -2,5 +2,3 @@
 
 struct display;
 typedef struct display display;
-
-void display ();
