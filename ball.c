@@ -33,6 +33,10 @@ ball *newBall (grid *g, paddle *p) {
     return b;
 }
 
+void freeBall (ball *b) {
+    free (b);
+}
+
 float getBallX (ball *b) {
     return b->x;
 }

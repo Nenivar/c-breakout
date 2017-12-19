@@ -8,6 +8,8 @@ typedef struct ball ball;
 
 // creates a new ball in the center of the grid
 ball *newBall (grid *g, paddle *p);
+// safely removes a ball
+void freeBall (ball *b);
 
 // returns the x pos. of the ball
 float getBallX (ball *b);

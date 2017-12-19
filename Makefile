@@ -1,4 +1,4 @@
-.PHONY: base grid paddle ball
+.PHONY: base grid paddle ball breakout
 GCC = gcc -std=c99 -O3 -pedantic -Wall -o breakout
 
 base:
@@ -12,4 +12,7 @@ paddle:
 		./breakout
 ball:
 		$(GCC) -DballMain=main ball.c paddle.c grid.c base.c
+		./breakout
+breakout:
+		$(GCC) breakout.c ball.c paddle.c grid.c base.c
 		./breakout

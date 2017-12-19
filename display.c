@@ -7,6 +7,15 @@ const int WIDTH = 640;
 const int HEIGHT = 480;
 
 /*
+ *  STRUCTURES
+ */
+struct display {
+    int width, height;
+    SDL_Window *window;
+    SDL_Surface *surface;
+};
+
+/*
  *  ERROR HANDLING
  */
 
@@ -30,7 +39,11 @@ void *notNull (void *p) {
  *  DISPLAY
  */
 
-void display () {
+display *newDisplay (int width, int height) {
+    display *d = malloc (sizeof (display));
+}
+
+/*void display () {
     notNeg (SDL_Init (SDL_INIT_VIDEO));
 
     SDL_Window *window = notNull (SDL_CreateWindow ("Breakout", 
@@ -43,4 +56,13 @@ void display () {
     SDL_Delay (10000);
 
     SDL_Quit ();
+}*/
+
+/*
+ *  TESTING
+ */
+
+int displayMain () {
+    succeed ("Display module OK");
+    return 0;
 }

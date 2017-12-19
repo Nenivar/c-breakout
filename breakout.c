@@ -1,44 +1,56 @@
 /*
  *  BREAKOUT
  */
+#include <malloc.h>
 #include <stdlib.h>
 #include <stdio.h>
 
 #include "display.h"
-#include "grid.c"
-#include "paddle.c"
-#include "state.c"
-#include "ball.c"
+#include "ball.h"
 
 /*
- *  TESTING
+ *  STRUCTURES
  */
-void test () {
-    testGrid ();
-    grid *g = newGrid (25, 20);
-    testPaddle (g);
-    testBall ();
-}
+struct game {
+    grid *g;
+    paddle *p;
+    ball *b;
+};
+typedef struct game game;
+
+/*
+ *  DISPLAY
+ */
 
 /*
  *  MAIN
  */
-void newGame () {
-    grid *g = newGrid (25, 20);
-    paddle *p = newPaddle (g);
-    ball *b = newBall (g, p);
-    state *s = newState (g, p, b);
+game *newGame () {
+    game *gm = malloc (sizeof (game));
 
-    // tick game
+    gm->g = newGrid (25, 20);
+    gm->p = newPaddle (gm->g);
+    gm->b = newBall (gm->g, gm->p);
 
-    freeState (s);
+    return gm;
+}
 
-    //display ();
+void tickGame (game *gm) {
+
+}
+
+void endGame (game *gm) {
+    freeGrid (gm->g);
+    freePaddle (gm->p);
+    freeBall (gm->b);
 }
 
 int main (int n, char *args [n]) {    
-    test ();
-    newGame ();
+    game *gm = newGame ();
+    tickGame (gm);
+    endGame (gm);
 
-    return 1;
+    succeed ("Breakout module OK");
+
+    return 0;
 }
