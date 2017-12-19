@@ -4,7 +4,7 @@
 
 // types of tiles in the grid
 enum TILE {
-    AIR, WALL, BRICK_RED, BRICK_YLW, BRICK_GRN
+    AIR, WALL, BRICK_BLU, BRICK_GRN, BRICK_YLW, BRICK_BRN, BRICK_ORG, BRICK_RED
 };
 typedef enum TILE TILE;
 

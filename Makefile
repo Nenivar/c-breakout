@@ -17,5 +17,5 @@ display:
 		$(GCC) -DdisplayMain=main display.c -lSDL2
 		./breakout
 breakout:
-		$(GCC) breakout.c ball.c paddle.c grid.c base.c -lSDL2
+		$(GCC) breakout.c display.c ball.c paddle.c grid.c base.c -lSDL2
 		./breakout
