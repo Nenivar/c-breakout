@@ -8,6 +8,7 @@ enum TILE {
 };
 typedef enum TILE TILE;
 
+
 // 2D array of uint8_t
 struct grid;
 typedef struct grid grid;

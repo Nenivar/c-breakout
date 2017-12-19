@@ -1,9 +1,7 @@
 #include <assert.h>
 #include <malloc.h>
 #include <stdbool.h>
-
-#include "grid.h"
-#include "paddle.h"
+#include <stdint.h>
 
 #include "ball.h"
 
@@ -13,12 +11,11 @@
 const int BALL_DIM = 1;
 
 struct ball {
-    uint8_t x, y,
+    float x, y,
             velX, velY;
     grid *g;
     paddle *p;
 };
-typedef struct ball ball;
 
 /*
  *  ACCESS
@@ -26,41 +23,45 @@ typedef struct ball ball;
 
 ball *newBall (grid *g, paddle *p) {
     ball *b = malloc (sizeof (ball));
-    b->x = 0;
-    b->y = 0;
+    b->x = getGridWidth (g) / 2;
+    b->y = getGridHeight (g) / 2;
     b->velX = 0;
-    b->velY = 0;
+    b->velY = -0.5f;
+    b->g = g;
+    b->p = p;
 
     return b;
 }
 
-uint8_t getBallX (ball *b) {
+float getBallX (ball *b) {
     return b->x;
 }
 
-uint8_t getBallY (ball *b) {
+float getBallY (ball *b) {
     return b->y;
 }
 
-uint8_t getBallVelX (ball *b) {
+float getBallVelX (ball *b) {
     return b->velX;
 }
 
-uint8_t getBallVelY (ball *b) {
+float getBallVelY (ball *b) {
     return b->velY;
 }
 
 /*
  *  MOVEMENT
  */
-
 static void move (ball *b) {
-    int x = b->x + b->velX;
-    int y = b->y + b->velY;
+    float x = b->x + b->velX;
+    x = x > 0 ? x : 0;
+    x = x < getGridWidth (b->g) ? x : getGridWidth (b->g);
+    float y = b->y + b->velY;
+    y = y > 0 ? y : 0;
+    y = y < getGridHeight (b->g) ? y : getGridHeight (b->g);
 
-    if (gridOobCheck (b->g, x, y)) {
-        b->x = x; b->y = y;
-    }
+    gridOobCheck (b->g, x, y);
+    b->x = x; b->y = y;
 }
 
 static void onGridCollide (ball *b) {
@@ -83,17 +84,31 @@ static bool checkPaddleCollision (ball *b) {
         && b->y <= PADDLE_Y + PADDLE_HEIGHT;
 }
 
-void tick (ball *b, grid *g, paddle *p) {
+void tick (ball *b) {
     move (b);
 
     if (checkGridCollision (b)) onGridCollide (b);
     if (checkPaddleCollision (b)) onPaddleCollide (b);
-    if (b->y < 0);
 }
 
 /*
  *  TESTING
  */
-void testBall () {
-    
+int ballMain () {
+    grid *g = newGrid (20, 10);
+    paddle *p = newPaddle (g);
+    ball *b = newBall (g, p);
+
+    assert (getBallX (b) == 10);
+    assert (getBallY (b) == 5);
+    assert (getBallVelX (b) == 0);
+    assert (getBallVelY (b) == -0.5f);
+    tick (b);
+    assert (getBallX (b) == 10);
+    assert (getBallY (b) == 4.5f);
+    assert (getBallVelX (b) == 0);
+    assert (getBallVelY (b) == -0.5f);
+
+    succeed ("Ball module OK");
+    return 0;
 }

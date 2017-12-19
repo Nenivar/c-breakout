@@ -1,12 +1,20 @@
-#include <stdint.h>
+#include "grid.h"
 
+extern const int PADDLE_WIDTH;
+extern const int PADDLE_HEIGHT;
+extern const int PADDLE_Y;
+
+// paddle which user controls to hit the ball
+// has a fixed position near the bottom of the grid
 struct paddle;
 typedef struct paddle paddle;
 
+// creates a new paddle in the middle of the grid
 paddle *newPaddle (grid *g);
+// safely removes the paddle
 void freePaddle ();
 
+// moves the paddle by dx horizontally
 void movePaddle (paddle *p, float dx);
+// returns the x pos. of the paddle
 float getPaddleX (paddle *p);
-
-void testPaddle (grid *g);

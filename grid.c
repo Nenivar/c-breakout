@@ -17,8 +17,12 @@ struct grid {
  */
 // out of bounds check
 void gridOobCheck (grid *g, uint8_t x, uint8_t y) {
-    if (!(x>= 0 && x < g->width
-        && y>= 0 && y < g->height)) fail ("Grid position out of bounds!");
+    if (!(x>= 0 && x < g->width && y>= 0 && y < g->height)){
+        char error [50];
+        sprintf (error, "Grid position (%d, %d) out of bounds (%d, %d)!",
+                x, y, g->width, g->height);
+        fail (error);
+    }
 }
 
 /*
@@ -34,8 +38,12 @@ grid *newGrid (uint8_t width, uint8_t height) {
         g->map [i] = malloc (sizeof (TILE) * height);
 
     for (int x = 0; x < width; x++) {
-        for (int y = 0; y < height; y++) 
+        for (int y = 0; y < height; y++){
             g->map [x] [y] = AIR;
+            if (y == 0) g->map [x] [y] = WALL;
+            if (x == 0) g->map [x] [y] = WALL;
+            if (x == width - 1) g->map [x] [y] = WALL;
+        }
     }
 
     return g;
@@ -72,7 +80,7 @@ int gridMain () {
     assert (new->width == 20);
     assert (new->height == 5);
     
-    assert (getTileAt (new, 0, 0) == AIR);
+    assert (getTileAt (new, 0, 0) == WALL);
     assert (getTileAt (new, 10, 3) == AIR);
     assert (getTileAt (new, 9, 2) == AIR);
 
