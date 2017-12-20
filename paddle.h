@@ -1,8 +1,8 @@
 #include "grid.h"
 
-extern const int PADDLE_WIDTH;
-extern const int PADDLE_HEIGHT;
-extern const int PADDLE_Y;
+extern const float PADDLE_WIDTH;
+extern const float PADDLE_HEIGHT;
+extern const float PADDLE_Y;
 
 // paddle which user controls to hit the ball
 // has a fixed position near the bottom of the grid
@@ -18,3 +18,10 @@ void freePaddle ();
 void movePaddle (paddle *p, float dx);
 // returns the x pos. of the paddle
 float getPaddleX (paddle *p);
+//returns the y pos. of the paddle
+float getPaddleY (paddle *p);
+
+// returns the width of the paddle
+float getPaddleWidth ();
+// returns the height of the paddle
+float getPaddleHeight ();

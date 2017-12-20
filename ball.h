@@ -23,4 +23,4 @@ float getBallVelY (ball *b);
 
 // changes the pos. of the ball
 // according to it's velocity & collisions
-void tick ();
+void tickBall (ball *b);

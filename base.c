@@ -18,7 +18,9 @@ void succeed (char *message) {
 }
 
 void fail (char *message) {
-    fprintf (stderr, "%s\n", message);
+    char err [100];
+    sprintf (err, "ERROR: %s", message);
+    fprintf (stderr, "%s\n", err);
     exit (1);
 }
 

@@ -1,6 +1,7 @@
 // https://csijh.gitlab.io/COMS10008/c/modules/display.c
 // was used for a lot of reference code :)
 
+#include <stdbool.h>
 #include <stdint.h>
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
@@ -57,6 +58,41 @@ col *newColour (int r, int g, int b) {
 }
 
 /*
+ *  INPUT
+ */
+
+key getKey (display *d) {
+    /*SDL_Event eventStructure;
+    SDL_Event *event = &eventStructure;
+
+    while (true) {
+        notNeg (SDL_PollEvent (event));
+        if (event->type == SDL_QUIT) {
+            SDL_Quit ();
+            exit (0);
+        } else if (event->type == SDL_KEYUP) {
+            int sym = event->key.keysym.sym;
+            if (sym == SDLK_LEFT) return LEFT;
+            if (sym == SDLK_RIGHT) return RIGHT;
+            if (sym == SDLK_ESCAPE) return ESCAPE;
+        }
+    }*/
+    bool quit = false;
+
+    SDL_Event event;
+    while (!quit && notNeg (SDL_PollEvent (&event))) {
+        if (event.type == SDL_QUIT) {
+            quit = true;
+        } else if (event.type == SDL_KEYDOWN) {
+            int sym = event.key.keysym.sym;
+            if (sym == SDLK_LEFT) return LEFT;
+            if (sym == SDLK_RIGHT) return RIGHT;
+            if (sym == SDLK_ESCAPE) return ESCAPE;
+        }
+    }
+}
+
+/*
  *  DISPLAY
  */
 
@@ -68,9 +104,9 @@ display *newDisplay (int width, int height) {
     d->window = notNull (SDL_CreateWindow ("Breakout", 100, 100, d->width, d->height, 0));
     d->renderer = notNull (SDL_CreateRenderer (d->window, -1, SDL_RENDERER_ACCELERATED));
     //d->surface = notNull (SDL_GetWindowSurface (d->window));
-    SDL_SetRenderDrawColor (d->renderer, 255, 255, 255, 255);
-    SDL_RenderClear (d->renderer);
-    SDL_RenderPresent (d->renderer);
+    //SDL_SetRenderDrawColor (d->renderer, 255, 255, 255, 255);
+    //SDL_RenderClear (d->renderer);
+    //SDL_RenderPresent (d->renderer);
     
     return d;
 }
@@ -102,8 +138,11 @@ void drawBox (display *d, int x, int y, int w, int h) {
 void drawFrame (display *d) {
     //notNeg (SDL_UpdateWindowSurface (d->window));
     SDL_RenderPresent (d->renderer);
-    SDL_Delay (20);
+
+    SDL_SetRenderDrawColor (d->renderer, 0, 0, 0, 255);
     SDL_RenderClear (d->renderer);
+
+    SDL_Delay (20);
 }
 
 /*void display () {

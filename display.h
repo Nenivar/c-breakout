@@ -1,5 +1,5 @@
 enum key {
-    LEFT='<', RIGHT='>'
+    LEFT='<', RIGHT='>', ESCAPE='X'
 };
 typedef enum key key;
 
@@ -18,4 +18,5 @@ col *newColour (int r, int g, int b);
 void drawFrame (display *d);
 void drawBox (display *d, int x, int y, int w, int h);
 
+key getKey (display *d);
 void pause (int ms);

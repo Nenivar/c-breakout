@@ -7,9 +7,8 @@
 /*
  *  STRUCTURES
  */
-const int PADDLE_WIDTH = 5;
-const int PADDLE_HEIGHT = 1;
-const int PADDLE_Y = 10;
+const float PADDLE_WIDTH = 7;
+const float PADDLE_HEIGHT = 0.6f;
 
 struct paddle {
     grid *g;
@@ -29,12 +28,24 @@ paddle *newPaddle (grid *g) {
 void movePaddle (paddle *p, float dx) {
     float newLoc = p->x + dx;
 
-    if (newLoc >= 0 && (newLoc + PADDLE_WIDTH) < getGridWidth (p->g))
+    if (newLoc >= 0 && (newLoc + PADDLE_WIDTH) < getGridWidth (p->g) * getTileWidth ())
         p->x = newLoc;
 }
 
 float getPaddleX (paddle *p) {
     return p->x;
+}
+
+float getPaddleY (paddle *p) {
+    return getGridHeight (p->g) - PADDLE_HEIGHT;
+}
+
+float getPaddleWidth () {
+    return PADDLE_WIDTH;
+}
+
+float getPaddleHeight () {
+    return PADDLE_HEIGHT;
 }
 
 void freePaddle (paddle *p) {

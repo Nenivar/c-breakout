@@ -20,7 +20,7 @@ void gridOobCheck (grid *g, uint8_t x, uint8_t y) {
     if (!(x>= 0 && x < g->width && y>= 0 && y < g->height)){
         char error [50];
         sprintf (error, "Grid position (%d, %d) out of bounds (%d, %d)!",
-                x, y, g->width, g->height);
+                x, y, g->width - 1, g->height - 1);
         fail (error);
     }
 }
@@ -46,6 +46,14 @@ grid *newGrid (uint8_t width, uint8_t height) {
         }
     }
 
+    for (int i = 1; i < width - 1; i++) {
+        g->map [i] [3] = BRICK_RED;
+        g->map [i] [4] = BRICK_ORG;
+        g->map [i] [5] = BRICK_YLW;
+        g->map [i] [6] = BRICK_GRN;
+        g->map [i] [7] = BRICK_BLU;
+    }
+
     return g;
 }
 
@@ -54,9 +62,21 @@ void setTileAt (grid *g, TILE tile, uint8_t x, uint8_t y) {
     g->map [x] [y] = tile;
 }
 
+void setTileAtWorld (grid *g, TILE tile, uint8_t x, uint8_t y) {
+    setTileAt (g, tile, x / getTileWidth (), y);
+}
+
 TILE getTileAt (grid *g, uint8_t x, uint8_t y) {
     gridOobCheck (g, x, y);
     return g->map [x] [y];
+}
+
+TILE getTileAtWorld (grid *g, uint8_t x, uint8_t y) {
+    return getTileAt (g, x / getTileWidth (), y);   
+}
+
+uint8_t getTileWidth () {
+    return 4;
 }
 
 uint8_t getGridWidth (grid *g) {

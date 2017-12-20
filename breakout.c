@@ -8,8 +8,10 @@
 #include "display.h"
 #include "ball.h"
 
-const float SCALE_X = 15;
+const float SCALE_X = 10;
 const float SCALE_Y = 10;
+const int GRID_W = 10;
+const int GRID_H = 20;
 
 /*
  *  STRUCTURES
@@ -20,6 +22,15 @@ struct game {
     ball *b;
 };
 typedef struct game game;
+
+/*
+ *  INPUT
+ */
+void processInput (game *gm, key k) {
+    paddle *p = gm->p;
+    if (k == LEFT) movePaddle (p, -0.8f);
+    if (k == RIGHT) movePaddle (p, 0.8f);
+}
 
 /*
  *  DISPLAY
@@ -46,31 +57,40 @@ col *getTileColour (TILE t) {
     }
 }
 
-void drawGrid (display *d, grid *g) {
+void drawGrid (display *d, game *gm) {
+    grid *g = gm->g;
     for (int y = 0; y < getGridHeight (g); y++) {
         for (int x = 0; x < getGridWidth (g); x++) {
             TILE t = getTileAt (g, x, y);
 
             if (t != AIR) {
                 setDrawColour (d, getTileColour (t));
-                drawBox (d, x * SCALE_X, y * SCALE_Y, SCALE_X, SCALE_Y);
+                drawBox (d, x * SCALE_X * getTileWidth (), y * SCALE_Y, SCALE_X * getTileWidth (), SCALE_Y);
             }
         }
     }
 }
 
-void drawPaddle (display *d, paddle *p) {
-
+void drawPaddle (display *d, game *gm) {
+    paddle *p = gm->p;
+    setDrawColour (d, getTileColour (BRICK_RED));
+    drawBox (d, getPaddleX (p) * SCALE_X, getPaddleY (p) * SCALE_Y,
+        getPaddleWidth () * SCALE_X, getPaddleHeight () * SCALE_Y);
 }
 
-void drawBall (display *d, ball *b) {
-
+void drawBall (display *d, game *gm) {
+    ball *b = gm->b;
+    setDrawColour (d, getTileColour (BRICK_RED));
+    drawBox (d, getBallX (b) * SCALE_X, getBallY (b) * SCALE_Y,
+        SCALE_X, SCALE_Y);
 }
 
 void drawGame (game *gm, display *d) {
-    drawGrid (d, gm->g);
-    drawPaddle (d, gm->p);
-    drawBall (d, gm->b);
+    drawGrid (d, gm);
+    drawPaddle (d, gm);
+    drawBall (d, gm);
+
+    drawFrame (d);
 }
 
 /*
@@ -79,7 +99,7 @@ void drawGame (game *gm, display *d) {
 game *newGame () {
     game *gm = malloc (sizeof (game));
 
-    gm->g = newGrid (15, 20);
+    gm->g = newGrid (GRID_W, GRID_H);
     gm->p = newPaddle (gm->g);
     gm->b = newBall (gm->g, gm->p);
 
@@ -87,7 +107,8 @@ game *newGame () {
 }
 
 void tickGame (game *gm) {
-
+    ball *b = gm->b;
+    tickBall (b);
 }
 
 void endGame (game *gm) {
@@ -98,13 +119,18 @@ void endGame (game *gm) {
 
 int main (int n, char *args [n]) {    
     game *gm = newGame ();
-    display *d = newDisplay (250, 250);
+    display *d = newDisplay (GRID_W * getTileWidth () * SCALE_X + 10, GRID_H * SCALE_Y + 10);
 
-    tickGame (gm);
-    drawGame (gm, d);
-    drawFrame (d);
+    key k;
+    while (k != ESCAPE) {
+        drawGame (gm, d);
+        tickGame (gm);
 
-    pause (3000);
+        k = getKey (d);
+        processInput (gm, k);
+
+        
+    }
 
     freeDisplay (d);
     endGame (gm);

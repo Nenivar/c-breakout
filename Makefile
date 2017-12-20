@@ -11,11 +11,11 @@ paddle:
 		$(GCC) -DpaddleMain=main paddle.c grid.c base.c
 		./breakout
 ball:
-		$(GCC) -DballMain=main ball.c paddle.c grid.c base.c
+		$(GCC) -DballMain=main ball.c paddle.c grid.c base.c -lm
 		./breakout
 display:
 		$(GCC) -DdisplayMain=main display.c -lSDL2
 		./breakout
 breakout:
-		$(GCC) breakout.c display.c ball.c paddle.c grid.c base.c -lSDL2
+		$(GCC) breakout.c display.c ball.c paddle.c grid.c base.c -lSDL2 -lm
 		./breakout

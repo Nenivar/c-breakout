@@ -21,12 +21,18 @@ void freeGrid (grid *g);
 
 // set a tile to a type at the given x, y pos.
 void setTileAt (grid *g, TILE tile, uint8_t x, uint8_t y);
+// set a tile to a type at the given x, y world pos.
+void setTileAt (grid *g, TILE tile ,uint8_t x, uint8_t y);
 // returns the tile at the given x, y pos.
 TILE getTileAt (grid *g, uint8_t x, uint8_t y);
+// returns the tile at the given x, y world pos.
+TILE getTileAtWorld (grid *g, uint8_t x, uint8_t y);
 
-// returns the width of the grid
+// returns the width of one tile
+uint8_t getTileWidth ();
+// returns the no. tiles in the x dir.
 uint8_t getGridWidth (grid *g);
-// returns the height of the grid
+// returns the no. tiles in the y dir.
 uint8_t getGridHeight (grid *g);
 
 // checks whether a given x, y pos. is inside the grid
