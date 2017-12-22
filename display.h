@@ -1,7 +1,8 @@
-enum key {
+enum KEY {
     LEFT='<', RIGHT='>', ESCAPE='X'
 };
-typedef enum key key;
+typedef enum KEY KEY;
+extern const int KEY_NO;
 
 struct display;
 typedef struct display display;
@@ -18,5 +19,5 @@ col *newColour (int r, int g, int b);
 void drawFrame (display *d);
 void drawBox (display *d, int x, int y, int w, int h);
 
-key getKey (display *d);
+void getKeysDown (display *d, bool *keysDown);
 void pause (int ms);

@@ -21,14 +21,15 @@ struct paddle {
 paddle *newPaddle (grid *g) {
     paddle *p = malloc (sizeof (paddle));
     p->g = g;
-    p->x = (getGridWidth (g) - PADDLE_WIDTH) / 2;
+    p->x = (getGridWidth (g) * getTileWidth () - PADDLE_WIDTH) / 2;
     return p;
 }
 
 void movePaddle (paddle *p, float dx) {
     float newLoc = p->x + dx;
 
-    if (newLoc >= 0 && (newLoc + PADDLE_WIDTH) < getGridWidth (p->g) * getTileWidth ())
+    if (newLoc >= getTileWidth ()
+        && (newLoc + PADDLE_WIDTH) < getGridWidth (p->g) * getTileWidth () - getTileWidth ())
         p->x = newLoc;
 }
 

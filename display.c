@@ -11,6 +11,8 @@
 const int WIDTH = 640;
 const int HEIGHT = 480;
 
+const int KEY_NO = 3;
+
 /*
  *  STRUCTURES
  */
@@ -61,7 +63,7 @@ col *newColour (int r, int g, int b) {
  *  INPUT
  */
 
-key getKey (display *d) {
+void getKeysDown (display *d, bool *keysDown) {
     /*SDL_Event eventStructure;
     SDL_Event *event = &eventStructure;
 
@@ -85,9 +87,14 @@ key getKey (display *d) {
             quit = true;
         } else if (event.type == SDL_KEYDOWN) {
             int sym = event.key.keysym.sym;
-            if (sym == SDLK_LEFT) return LEFT;
-            if (sym == SDLK_RIGHT) return RIGHT;
-            if (sym == SDLK_ESCAPE) return ESCAPE;
+            if (sym == SDLK_LEFT) keysDown [LEFT] = true;
+            if (sym == SDLK_RIGHT) keysDown [RIGHT] = true;
+            if (sym == SDLK_ESCAPE) keysDown [ESCAPE] = true;
+        } else if (event.type == SDL_KEYUP) {
+            int sym = event.key.keysym.sym;
+            if (sym == SDLK_LEFT) keysDown [LEFT] = false;
+            if (sym == SDLK_RIGHT) keysDown [RIGHT] = false;
+            if (sym == SDLK_ESCAPE) keysDown [ESCAPE] = false;
         }
     }
 }

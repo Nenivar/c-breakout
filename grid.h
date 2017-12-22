@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdint.h>
 
 #include "base.h"
@@ -37,3 +38,5 @@ uint8_t getGridHeight (grid *g);
 
 // checks whether a given x, y pos. is inside the grid
 void gridOobCheck (grid *g, uint8_t x, uint8_t y);
+
+bool isWithinGrid (grid *g, uint8_t x, uint8_t y);

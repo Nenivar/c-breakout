@@ -1,5 +1,6 @@
 #include <assert.h>
 #include <malloc.h>
+#include <stdbool.h>
 #include <stdint.h>
 
 #include "grid.h"
@@ -40,18 +41,17 @@ grid *newGrid (uint8_t width, uint8_t height) {
     for (int x = 0; x < width; x++) {
         for (int y = 0; y < height; y++){
             g->map [x] [y] = AIR;
-            if (y == 0) g->map [x] [y] = WALL;
-            if (x == 0) g->map [x] [y] = WALL;
-            if (x == width - 1) g->map [x] [y] = WALL;
+            if (y == 6 || (x == 0 && y >= 6) || (x == width - 1 && y >= 6))
+                g->map [x] [y] = WALL;
         }
     }
 
     for (int i = 1; i < width - 1; i++) {
-        g->map [i] [3] = BRICK_RED;
-        g->map [i] [4] = BRICK_ORG;
-        g->map [i] [5] = BRICK_YLW;
-        g->map [i] [6] = BRICK_GRN;
-        g->map [i] [7] = BRICK_BLU;
+        g->map [i] [7] = BRICK_RED;
+        g->map [i] [8] = BRICK_ORG;
+        g->map [i] [9] = BRICK_YLW;
+        g->map [i] [10] = BRICK_GRN;
+        g->map [i] [11] = BRICK_BLU;
     }
 
     return g;
@@ -85,6 +85,15 @@ uint8_t getGridWidth (grid *g) {
 
 uint8_t getGridHeight (grid *g) {
     return g->height;
+}
+
+bool isWithinGrid (grid *g, uint8_t x, uint8_t y) {
+    return x >= 0 && x < g->width
+        && y >= 0 && y < g->height;
+}
+
+bool isWithinGridWorld (grid *g, uint8_t x, uint8_t y) {
+    return isWithinGridWorld (g, x / getTileWidth (), y);
 }
 
 void freeGrid (grid *g) {

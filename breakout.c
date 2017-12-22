@@ -2,16 +2,17 @@
  *  BREAKOUT
  */
 #include <malloc.h>
+#include <stdbool.h>
 #include <stdlib.h>
 #include <stdio.h>
 
 #include "display.h"
-#include "ball.h"
+#include "number.h"
 
 const float SCALE_X = 10;
 const float SCALE_Y = 10;
 const int GRID_W = 10;
-const int GRID_H = 20;
+const int GRID_H = 30;
 
 /*
  *  STRUCTURES
@@ -26,10 +27,10 @@ typedef struct game game;
 /*
  *  INPUT
  */
-void processInput (game *gm, key k) {
+void processInput (game *gm, bool *keysDown) {
     paddle *p = gm->p;
-    if (k == LEFT) movePaddle (p, -0.8f);
-    if (k == RIGHT) movePaddle (p, 0.8f);
+    if (keysDown [LEFT]) movePaddle (p, -0.8f);
+    if (keysDown [RIGHT]) movePaddle (p, 0.8f);
 }
 
 /*
@@ -121,15 +122,16 @@ int main (int n, char *args [n]) {
     game *gm = newGame ();
     display *d = newDisplay (GRID_W * getTileWidth () * SCALE_X + 10, GRID_H * SCALE_Y + 10);
 
-    key k;
-    while (k != ESCAPE) {
+    placeNumberAt (10, gm->g, 1, 0);
+
+    bool keysDown [KEY_NO];
+    for (int i = 0; i < KEY_NO; i++) keysDown [i] = false;
+    while (keysDown [ESCAPE]) {
         drawGame (gm, d);
         tickGame (gm);
 
-        k = getKey (d);
-        processInput (gm, k);
-
-        
+        getKeysDown (d, keysDown);
+        processInput (gm, keysDown);
     }
 
     freeDisplay (d);

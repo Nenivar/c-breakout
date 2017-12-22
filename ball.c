@@ -2,7 +2,9 @@
 #include <malloc.h>
 #include <math.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <stdint.h>
+#include <time.h>
 
 #include "ball.h"
 
@@ -13,7 +15,9 @@ const int BALL_DIM = 1;
 
 struct ball {
     float x, y,
-            velX, velY;
+        prevX, prevY,
+        velX, velY,
+        speed;
     grid *g;
     paddle *p;
 };
@@ -23,11 +27,14 @@ struct ball {
  */
 
 ball *newBall (grid *g, paddle *p) {
+    srand (time (NULL));
+
     ball *b = malloc (sizeof (ball));
-    b->x = getGridWidth (g) / 2;
+    b->x = (getGridWidth (g) * getTileWidth () - BALL_DIM) / 2;
     b->y = getGridHeight (g) / 2;
-    b->velX = 0;
-    b->velY = 0.2f;
+    b->speed = 0.6f;
+    b->velX = ((rand () % 200) - 100) / 100.0f * b->speed;
+    b->velY = b->speed;
     b->g = g;
     b->p = p;
 
@@ -52,6 +59,10 @@ float getBallVelX (ball *b) {
 
 float getBallVelY (ball *b) {
     return b->velY;
+}
+
+float getBallSpeed (ball *b) {
+    return b->speed;
 }
 
 /*
@@ -89,6 +100,8 @@ static void move (ball *b) {
     y = y > getGridHeight (b->g) ? getGridHeight (b->g) : y;*/
 
     //gridOobCheck (b->g, x, y);
+    b->prevX = b->x;
+    b->prevY = b->y;
     b->x = x; b->y = y;
 }
 
@@ -112,9 +125,8 @@ static void onGridCollide (ball *b, int x, int y) {
     //if (b->x < x || b->x > x) b->velX = -b->velX;
 
     //if (b->y + 1 < y || b->y > y + 1) b->velY = -b->velY;
-    float prevX = b->x - b->velX, prevY = b->y - b->velY;
     
-    if (getTileAtWorld (b->g, x, y) != WALL) setTileAtWorld (b->g, AIR, x, y);
+    
     
     /*if (perfY > y) {
         //b->y = y + 1;
@@ -127,15 +139,27 @@ static void onGridCollide (ball *b, int x, int y) {
     }*/
     bool v = false, h = false;
     // left & right
-    if (prevX < x || prevX > x + 1) {
+    /*if (b->prevX < x || b->prevX > x + 1) {
         printf ("coll LR!\n");
         v = true;
         b->velX = -b->velX;
     }
     // bottom & top
-    if (prevY > y + 1 || prevY < y) {
+    else if (b->prevY > y + 1 || b->prevY < y) {
         printf ("coll TB!\n");
         h = true;
+        b->velY = -b->velY;
+    }*/
+    float nextX = b->x + b->velX, nextY = b->y + b->velY;
+    if (getTileAtWorld (b->g, nextX, nextY) != WALL);// setTileAtWorld (b->g, AIR, nextX, nextY);
+    // l & r
+    if (b->x < x || b-x > x + 1) {
+        printf ("coll LR!\n");
+        b->velX = -b->velX;
+    }
+    // t & b
+    else if (b->y < y || b->y > y + 1) {
+        printf ("coll TB!\n");
         b->velY = -b->velY;
     }
 
@@ -151,11 +175,11 @@ static void onGridCollide (ball *b, int x, int y) {
 static void onPaddleCollide (ball *b) {
     float halfway = getPaddleX (b->p) + getPaddleWidth () / 2;
     // left = pos; right = neg
-    float paddleBallDx = halfway - b->x;
+    float paddleBallDx = halfway - (b->x - (BALL_DIM * 0.5f));
     float perc = (1.0f / (getPaddleWidth () / 2)) * paddleBallDx;
 
-    float vX = -sin (perc) * 0.2;
-    float vY = -cos (perc) * 0.2;
+    float vX = -sin (perc) * getBallSpeed (b);
+    float vY = -cos (perc) * getBallSpeed (b);
     printf ("collision; dx=%.2f, perc=%.2f, vX=%.2f, vY=%.2f\n",
         paddleBallDx, perc, vX, vY);
 
@@ -170,7 +194,10 @@ static bool checkGridCollision (ball *b) {
         /*|| getTileAt (b->g, (int) b->x / getTileWidth () + 1, (int) b->y) != AIR
         || getTileAt (b->g, (int) b->x / getTileWidth (), (int) b->y + 1) != AIR
         || getTileAt (b->g, (int) b->x / getTileWidth () + 1, (int) b->y + 1) != AIR;*/
-    return getTileAtWorld (b->g, (int) b->x, (int) b->y) != AIR;
+    //return getTileAtWorld (b->g, (int) b->x, (int) b->y) != AIR;
+
+    int nextX = b->x + b->velX, nextY = b->y + b->velY;
+    return (getTileAtWorld (b->g, nextX, nextY) != AIR);
 }
 
 static bool checkPaddleCollision (ball *b) {
@@ -183,16 +210,40 @@ static bool checkPaddleCollision (ball *b) {
         && b->y >= getPaddleY (b->p)
         && b->y <= getPaddleY (b->p) + getPaddleHeight ();*/
 }
-
 void tickBall (ball *b) {
-    move (b);
-    if (checkGridCollision (b)) {
-        printf ("wall collision; (%.2f,%.2f) & (%d,%d) | vX:%.2f, vY:%.2f\n", b->x, b->y, (int) b->x, (int) b->y, b->velX, b->velY);
+    float left = b->x, right = b->x + BALL_DIM,
+        top = b->y, bottom = b->y + BALL_DIM,
+        nextLeft = left + b->velX, nextRight = right + b->velX,
+        nextTop = top + b->velY, nextBottom = bottom + b->velY;
+    float nextX = b->x + b->velX, nextY = b->y + b->velY;
 
-        onGridCollide (b, b->x, b->y);
+    if (getTileAtWorld (b->g, nextX, b->y) != AIR) {
+        b->velX *= -1;
+        //if (getTileAtWorld (b->g, nextX, b->y) != WALL) setTileAtWorld (b->g, AIR, nextX, b->y);
+        if (getTileAtWorld (b->g, nextX, b->y) != WALL) setTileAtWorld (b->g, AIR, (int) nextX, (int) b->y);
     }
+    if (getTileAtWorld (b->g, b->x, nextY) != AIR) {
+        b->velY *= -1;
+        printf ("deleting %d %d\n", b->x, nextY);
+        if (getTileAtWorld (b->g, b->x, nextY) != WALL) setTileAtWorld (b->g, AIR, (int) b->x, (int) nextY);
+    }
+
+    //if (isWithinGrid (b->g, b->x, nextTop) && getTileAtWorld (b->g, nextLeft, nextTop) != AIR) b->velX *= -1;
+    //if (getTileAtWorld (b->g, nextRight , nextTop) != AIR) b->velX *= -1;
+    //if (isWithinGridWorld (b->g, nextLeft, nextTop) && getTileAtWorld (b->g, nextLeft, nextTop) != AIR) b->velY *= -1;
+    //if (isWithinGridWorld (b->g, nextLeft, nextBottom) && getTileAtWorld (b->g, nextLeft, nextBottom) != AIR) b->velY *= -1;
+
+
+    /*if (checkGridCollision (b)) {
+        printf ("wall collision; (%.2f,%.2f) & (%d,%d) | vX:%.2f, vY:%.2f\n", b->x, b->y, (int) b->x, (int) b->y, b->velX, b->velY);
+        onGridCollide (b, b->x, b->y);
+    }*/
+
     if (checkPaddleCollision (b)) onPaddleCollide (b);
+
+    move (b);
 }
+
 
 /*
  *  TESTING
@@ -201,16 +252,18 @@ int ballMain () {
     grid *g = newGrid (20, 10);
     paddle *p = newPaddle (g);
     ball *b = newBall (g, p);
+    float startX = getBallX (b), startY = getBallY (b);
+    float velX = getBallVelX (b), velY = getBallVelY (b);
 
-    assert (getBallX (b) == 10);
-    assert (getBallY (b) == 5);
-    assert (getBallVelX (b) == 0);
-    assert (getBallVelY (b) == -0.5f);
+    assert (getBallX (b) == startX);
+    assert (getBallY (b) == startY);
+    assert (getBallVelX (b) == velX);
+    assert (getBallVelY (b) == velY);
     tickBall (b);
-    assert (getBallX (b) == 10);
-    assert (getBallY (b) == 4.5f);
-    assert (getBallVelX (b) == 0);
-    assert (getBallVelY (b) == -0.5f);
+    assert (getBallX (b) == startX + velX);
+    assert (getBallY (b) == startY + velY);
+    assert (getBallVelX (b) == velX);
+    assert (getBallVelY (b) == velY);
 
     succeed ("Ball module OK");
     return 0;
