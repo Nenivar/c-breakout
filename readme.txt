@@ -14,5 +14,8 @@ Each module has its own test/main function. The comments for most methods are in
 Base:
 This contains a success and failure function, much like yours in the wanderer game example. At one point I also used it for some shared utility functions, which became unneeded and removed.
 
+Grid:
+Contains a tilemap structure (with a 2D array) and methods to modify it.
+
 Number:
-I could have used a truetype font for 
+2D arrays for each digit are stored and used to display numbers on a grid. I could have used a truetype font instead but this method is a bit easier.

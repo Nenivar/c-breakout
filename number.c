@@ -1,4 +1,4 @@
-#include <stdio.h>
+#include <assert.h>
 
 #include "number.h"
 
@@ -76,23 +76,14 @@ const TILE NINE [5] [4] = {
     {1,1,1,1}
 };
 
+// places a 2D array of TILE into a grid at an (x, y) pos.
 static void placeDigitArrayAt (const TILE array [NUM_HEIGHT] [NUM_WIDTH], grid *g, uint8_t x, uint8_t y) {
-    //printf ("\nnew\n");
-    /*for (int yy = 0; yy < NUM_HEIGHT; yy++) {
-        for (int xx = 0; xx < NUM_WIDTH; xx++) if (array [xx] [yy] == 1) setTileAt (g, WALL, xx + x, yy + y);
-    }*/
-    for (int yy = 0; yy < NUM_WIDTH; yy++) {
-        for (int xx = 0; xx < NUM_HEIGHT; xx++) setTileAt (g, array [xx] [yy], yy + x, xx + y);//printf ("%d", array [xx] [yy]);
-        //printf ("\n");
-    }
-    /*int row = 0;
-    for (int i = 0; i < NUM_HEIGHT * NUM_WIDTH; i++) {
-        int x = i % NUM_WIDTH;
-        if (array [x + row * NUM_WIDTH]) setTileAt (g, WALL, x, row);
-        if ((i + 1) % NUM_WIDTH == 0) row++;
-    }*/
+    for (int yy = 0; yy < NUM_WIDTH; yy++)
+        for (int xx = 0; xx < NUM_HEIGHT; xx++)
+            setTileAt (g, array [xx] [yy], yy + x, xx + y);
 }
 
+// maps digits to 2D arrays
 static void placeDigitAt (uint8_t digit, grid *g, uint8_t x, uint8_t y) {
     switch (digit) {
         case 0:
@@ -131,7 +122,8 @@ void placeNumberAt (uint8_t num, grid *g, uint8_t x, uint8_t y) {
             c++;
         }
     }
-    for (int i = 0; i < c; i++) placeDigitAt (digits [i], g, x + (NUM_WIDTH + 1) * (c - i - 1), y);//printf ("i%d:%d,", i, digits [i]);
+    for (int i = 0; i < c; i++)
+        placeDigitAt (digits [i], g, x + (NUM_WIDTH + 1) * (c - i - 1), y);
 }
 
 /*
@@ -139,8 +131,11 @@ void placeNumberAt (uint8_t num, grid *g, uint8_t x, uint8_t y) {
  */
 
 int numberMain () {
-    grid *g = newGrid (20, 20);
+    grid *g = newGrid (20, 20, 0);
     placeNumberAt (23, g, 1, 0);
+
+    assert (getTileAt (g, 0, 0) == AIR);
+    assert (getTileAt (g, 1, 0) == WALL);
 
     succeed ("Number module OK");
     return 0;

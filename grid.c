@@ -18,9 +18,8 @@ const int TOP_SPACE = 6;
 /*
  *  ERROR HANDLING
  */
-// out of bounds check
 void gridOobCheck (grid *g, uint8_t x, uint8_t y) {
-    if (!(x>= 0 && x < g->width && y>= 0 && y < g->height)){
+    if (!isWithinGrid (g, x, y)) {
         char error [50];
         sprintf (error, "Grid position (%d, %d) out of bounds (%d, %d)!",
                 x, y, g->width - 1, g->height - 1);
@@ -32,28 +31,29 @@ void gridOobCheck (grid *g, uint8_t x, uint8_t y) {
  *  GRID MANIPULATION
  */
 
+// fills a grid with layers of breakable bricks
 void populateGrid (grid *g, int startY, int layers) {
     TILE colourCycle = BRICK_RED;
-    printf ("\n\nPOPULATE\n\n");
-    
-    for (int y = startY; y < startY + layers; y++) {
-        for (int i = 1; i < g->width - 1; i++) {
-            
-            g->map [i] [y] = colourCycle;
 
-        /*g->map [i] [startY] = BRICK_RED;
-        g->map [i] [startY + 1] = BRICK_ORG;
-        g->map [i] [startY + 2] = BRICK_YLW;
-        g->map [i] [startY + 3] = BRICK_GRN;
-        g->map [i] [startY + 4] = BRICK_BLU;*/
-        }
+    for (int y = startY; y < startY + layers; y++) {
+        for (int i = 1; i < g->width - 1; i++)
+            g->map [i] [y] = colourCycle;
 
         colourCycle = colourCycle <= BRICK_BLU
             ? BRICK_RED : colourCycle - 1;
     }
 }
 
-grid *newGrid (uint8_t width, uint8_t height) {
+// creates a square wall grid from a y position
+void wallGrid (grid *g, int startY) {
+    for (int y = startY; y < g->height; y++) {
+        for (int x = 0; x < g->width; x++) 
+            if (y == startY || x == 0 || x == g->width - 1)
+                g->map [x] [y] = WALL;
+    }
+}
+
+grid *newGrid (uint8_t width, uint8_t height, int layers) {
     grid *g = malloc (sizeof (g));
     g->width = width; g->height = height;
 
@@ -62,18 +62,21 @@ grid *newGrid (uint8_t width, uint8_t height) {
         g->map [i] = malloc (sizeof (TILE) * height);
 
     for (int x = 0; x < width; x++) {
-        for (int y = 0; y < height; y++){
+        for (int y = 0; y < height; y++)
             g->map [x] [y] = AIR;
-            if (y == 6 || (x == 0 && y >= 6) || (x == width - 1 && y >= 6))
-                g->map [x] [y] = WALL;
-        }
     }
 
-    g->layers = 6;
+    g->layers = layers;
 
-    populateGrid (g, TOP_SPACE + 1, g->layers);
+    wallGrid (g, TOP_SPACE);
+    if (layers != 0) populateGrid (g, TOP_SPACE + 3, g->layers);
 
     return g;
+}
+
+void freeGrid (grid *g) {
+    for (int i = 0; i < getGridWidth (g); i++) free (g->map [i]);
+    free (g);
 }
 
 void setTileAt (grid *g, TILE tile, uint8_t x, uint8_t y) {
@@ -94,20 +97,16 @@ TILE getTileAtWorld (grid *g, uint8_t x, uint8_t y) {
     return getTileAt (g, x / getTileWidth (), y);   
 }
 
-int getTileWidth () {
-    return 4;
-}
-
 int getGridWidth (grid *g) {
     return g->width;
 }
 
-int getLayers (grid *g) {
-    return g->layers;
-}
-
 int getGridHeight (grid *g) {
     return g->height;
+}
+
+int getLayers (grid *g) {
+    return g->layers;
 }
 
 bool isWithinGrid (grid *g, uint8_t x, uint8_t y) {
@@ -119,16 +118,15 @@ bool isWithinGridWorld (grid *g, uint8_t x, uint8_t y) {
     return isWithinGridWorld (g, x / getTileWidth (), y);
 }
 
-void freeGrid (grid *g) {
-    for (int i = 0; i < getGridWidth (g); i++) free (g->map [i]);
-    free (g);
+int getTileWidth () {
+    return 4;
 }
 
 /*
  *  TESTING
  */
 int gridMain () {
-    grid *new = newGrid (20, 15);
+    grid *new = newGrid (20, 15, 0);
     assert (new->width == 20);
     assert (new->height == 15);
     

@@ -57,7 +57,7 @@ void freePaddle (paddle *p) {
  *  TESTING
  */
 int paddleMain () {
-    grid *g = newGrid (25, 10);
+    grid *g = newGrid (25, 10, 0);
     paddle *p = newPaddle (g);
 
     uint8_t startX = (25 - PADDLE_WIDTH) / 2;

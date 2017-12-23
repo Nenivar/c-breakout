@@ -1,4 +1,4 @@
-#include "grid.h"
+#include "number.h"
 
 extern const float PADDLE_WIDTH;
 extern const float PADDLE_HEIGHT;

@@ -32,8 +32,7 @@ ball *newBall (grid *g, paddle *p) {
     ball *b = malloc (sizeof (ball));
     b->x = (getGridWidth (g) * getTileWidth () - BALL_DIM) / 2;
     //b->y = getGridHeight (g) / 2;
-    printf ("layers:%d,space:%d\n", getLayers (g), TOP_SPACE);
-    b->y = getLayers (g) + TOP_SPACE + 1;
+    b->y = getLayers (g) + TOP_SPACE + 4;
     b->speed = 0.6f;
     b->velX = ((rand () % 200) - 100) / 100.0f * b->speed;
     b->velY = b->speed;
@@ -255,7 +254,7 @@ void tickBall (ball *b) {
  *  TESTING
  */
 int ballMain () {
-    grid *g = newGrid (20, 10);
+    grid *g = newGrid (20, 10, 0);
     paddle *p = newPaddle (g);
     ball *b = newBall (g, p);
     float startX = getBallX (b), startY = getBallY (b);

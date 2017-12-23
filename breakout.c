@@ -7,12 +7,12 @@
 #include <stdio.h>
 
 #include "display.h"
-#include "number.h"
+#include "ball.h"
 
 const float SCALE_X = 10;
 const float SCALE_Y = 10;
 const int GRID_W = 10;
-const int GRID_H = 20;
+const int GRID_H = 25;
 
 /*
  *  STRUCTURES
@@ -66,15 +66,15 @@ col *getTileColour (TILE t) {
     }
 }
 
-void drawGrid (display *d, game *gm) {
-    grid *g = gm->g;
+void drawGrid (display *d, grid *g, int offsetY) {
+    //grid *g = gm->g;
     for (int y = 0; y < getGridHeight (g); y++) {
         for (int x = 0; x < getGridWidth (g); x++) {
             TILE t = getTileAt (g, x, y);
 
             if (t != AIR) {
                 setDrawColour (d, getTileColour (t));
-                drawBox (d, x * SCALE_X * getTileWidth (), y * SCALE_Y, SCALE_X * getTileWidth (), SCALE_Y);
+                drawBox (d, x * SCALE_X * getTileWidth (), y * SCALE_Y + offsetY, SCALE_X * getTileWidth (), SCALE_Y);
             }
         }
     }
@@ -95,7 +95,7 @@ void drawBall (display *d, game *gm) {
 }
 
 void drawGame (game *gm, display *d) {
-    drawGrid (d, gm);
+    drawGrid (d, gm->g, 7);
     drawPaddle (d, gm);
     if (gm->ballExists) {
         drawBall (d, gm);
@@ -110,7 +110,7 @@ void drawGame (game *gm, display *d) {
 game *newGame () {
     game *gm = malloc (sizeof (game));
 
-    gm->g = newGrid (GRID_W, GRID_H);
+    gm->g = newGrid (GRID_W, GRID_H, 6);
     gm->p = newPaddle (gm->g);
     gm->ballExists = false;
     gm->score = 0;

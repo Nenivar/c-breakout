@@ -7,18 +7,18 @@ base:
 grid:
 		$(GCC) -DgridMain=main grid.c base.c
 		./breakout
+number:
+		$(GCC) -DnumberMain=main number.c grid.c base.c -lm
+		./breakout
 paddle:
-		$(GCC) -DpaddleMain=main paddle.c grid.c base.c
+		$(GCC) -DpaddleMain=main paddle.c number.c grid.c base.c
 		./breakout
 ball:
-		$(GCC) -DballMain=main ball.c paddle.c grid.c base.c -lm
-		./breakout
-number:
-		$(GCC) -DnumberMain=main number.c ball.c paddle.c grid.c base.c -lm
+		$(GCC) -DballMain=main ball.c paddle.c number.c grid.c base.c -lm
 		./breakout
 display:
 		$(GCC) -DdisplayMain=main display.c -lSDL2
 		./breakout
 breakout:
-		$(GCC) breakout.c display.c number.c ball.c paddle.c grid.c base.c -lSDL2 -lm
+		$(GCC) breakout.c display.c ball.c paddle.c number.c grid.c base.c -lSDL2 -lm
 		./breakout
