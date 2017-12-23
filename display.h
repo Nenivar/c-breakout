@@ -1,5 +1,5 @@
 enum KEY {
-    LEFT='<', RIGHT='>', ESCAPE='X'
+    LEFT='<', RIGHT='>', BALL=' ', ESCAPE='X'
 };
 typedef enum KEY KEY;
 extern const int KEY_NO;

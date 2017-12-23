@@ -11,8 +11,8 @@
 
 const float SCALE_X = 10;
 const float SCALE_Y = 10;
-const int GRID_W = 10;
-const int GRID_H = 30;
+const int GRID_W = 20;
+const int GRID_H = 50;
 
 /*
  *  STRUCTURES
@@ -21,6 +21,8 @@ struct game {
     grid *g;
     paddle *p;
     ball *b;
+    bool ballExists;
+    int score, balls;
 };
 typedef struct game game;
 
@@ -31,6 +33,12 @@ void processInput (game *gm, bool *keysDown) {
     paddle *p = gm->p;
     if (keysDown [LEFT]) movePaddle (p, -0.8f);
     if (keysDown [RIGHT]) movePaddle (p, 0.8f);
+
+    if (keysDown [BALL] && !gm->ballExists) {
+        gm->b = newBall (gm->g, gm->p);
+        gm->ballExists = true;
+        gm->balls += 1;
+    }
 }
 
 /*
@@ -89,7 +97,9 @@ void drawBall (display *d, game *gm) {
 void drawGame (game *gm, display *d) {
     drawGrid (d, gm);
     drawPaddle (d, gm);
-    drawBall (d, gm);
+    if (gm->ballExists) {
+        drawBall (d, gm);
+    }
 
     drawFrame (d);
 }
@@ -102,14 +112,28 @@ game *newGame () {
 
     gm->g = newGrid (GRID_W, GRID_H);
     gm->p = newPaddle (gm->g);
-    gm->b = newBall (gm->g, gm->p);
+    gm->ballExists = false;
+    gm->score = 0;
+    gm->balls = 0;
 
     return gm;
 }
 
+void updateStats (game *gm) {
+    placeNumberAt (gm->balls, gm->g, 0, 0);
+}
+
 void tickGame (game *gm) {
-    ball *b = gm->b;
-    tickBall (b);
+    if (gm->ballExists) {
+        ball *b = gm->b;
+        tickBall (b);
+        if (getBallY (b) > getGridHeight (gm->g) + 1) {
+            freeBall (b);
+            gm->ballExists = false;
+        }
+    }
+
+    updateStats (gm);
 }
 
 void endGame (game *gm) {
@@ -120,9 +144,7 @@ void endGame (game *gm) {
 
 int main (int n, char *args [n]) {    
     game *gm = newGame ();
-    display *d = newDisplay (GRID_W * getTileWidth () * SCALE_X + 10, GRID_H * SCALE_Y + 10);
-
-    placeNumberAt (10, gm->g, 1, 0);
+    display *d = newDisplay (GRID_W * getTileWidth () * SCALE_X, GRID_H * SCALE_Y);
 
     bool keysDown [KEY_NO];
     for (int i = 0; i < KEY_NO; i++) keysDown [i] = false;
@@ -134,8 +156,8 @@ int main (int n, char *args [n]) {
         processInput (gm, keysDown);
     }
 
-    freeDisplay (d);
-    endGame (gm);
+    //freeDisplay (d);
+    //endGame (gm);
 
     succeed ("Breakout module OK");
 

@@ -5,50 +5,78 @@
 const uint8_t NUM_HEIGHT = 5;
 const uint8_t NUM_WIDTH = 4;
 
-const int ZERO_ [5] [4] = {
+const TILE ZERO [5] [4] = {
     {1,1,1,1},
     {1,0,0,1},
     {1,0,0,1},
     {1,0,0,1},
     {1,1,1,1}
 };
-const int ONE_ [5] [4] = {
+const TILE ONE [5] [4] = {
     {0,1,0,0},
     {1,1,0,0},
     {0,1,0,0},
     {0,1,0,0},
     {1,1,1,1}
 };
-const bool *ZERO [4] [5] = {
-    {true,   true,   true,   true},
-    {true,  false,   false,  true},
-    {true,  false,   false,  true},
-    {true,  false,   false,  true},
-    {true,   true,   true,   true}
+const TILE TWO [5] [4] = {
+    {1,1,1,1},
+    {0,0,0,1},
+    {0,1,1,0},
+    {1,0,0,0},
+    {1,1,1,1}
 };
-const bool *ONE = {
-    false,  false,  true,   false,
-    false,  true,   true,   false,
-    true,   false,  true,   false,
-    false,  false,  true,   false,
-    false,  true,   true,   true
+const TILE THREE [5] [4] = {
+    {1,1,1,1},
+    {0,0,0,1},
+    {0,1,1,1},
+    {0,0,0,1},
+    {1,1,1,1}
 };
-const bool *TWO = {
-    false,  true,   true,   true,
-    true,   false,  false,  true,
-    false,  false,  true,   false,
-    false,  true,   false,  false,
-    true,   true,   true,   true
+const TILE FOUR [5] [4] = {
+    {0,0,1,0},
+    {0,1,1,0},
+    {1,1,1,1},
+    {0,0,1,0},
+    {0,0,1,0}
 };
-const bool *THREE = {
-    true,   true,   true,   true,
-    true,   false,  false,  true,
-    true,   true,   true,   true,
-    true,   false,  false,  true,
-    true,   true,   true,   true    
+const TILE FIVE [5] [4] = {
+    {1,1,1,1},
+    {1,0,0,0},
+    {1,1,1,0},
+    {0,0,0,1},
+    {1,1,1,0}
+};
+const TILE SIX [5] [4] = {
+    {0,1,1,1},
+    {1,0,0,0},
+    {1,1,1,0},
+    {1,0,0,1},
+    {0,1,1,0}
+};
+const TILE SEVEN [5] [4] = {
+    {1,1,1,1},
+    {0,0,0,1},
+    {0,0,1,0},
+    {0,1,0,0},
+    {1,0,0,0}
+};
+const TILE EIGHT [5] [4] = {
+    {1,1,1,1},
+    {1,0,0,1},
+    {1,1,1,1},
+    {1,0,0,1},
+    {1,1,1,1}
+};
+const TILE NINE [5] [4] = {
+    {1,1,1,1},
+    {1,0,0,1},
+    {1,1,1,1},
+    {0,0,0,1},
+    {1,1,1,1}
 };
 
-static void placeDigitArrayAt (const int array [NUM_HEIGHT] [NUM_WIDTH], grid *g, uint8_t x, uint8_t y) {
+static void placeDigitArrayAt (const TILE array [NUM_HEIGHT] [NUM_WIDTH], grid *g, uint8_t x, uint8_t y) {
     //printf ("\nnew\n");
     /*for (int yy = 0; yy < NUM_HEIGHT; yy++) {
         for (int xx = 0; xx < NUM_WIDTH; xx++) if (array [xx] [yy] == 1) setTileAt (g, WALL, xx + x, yy + y);
@@ -68,13 +96,25 @@ static void placeDigitArrayAt (const int array [NUM_HEIGHT] [NUM_WIDTH], grid *g
 static void placeDigitAt (uint8_t digit, grid *g, uint8_t x, uint8_t y) {
     switch (digit) {
         case 0:
-            placeDigitArrayAt (ZERO_, g, x, y); break;
+            placeDigitArrayAt (ZERO, g, x, y); break;
         case 1:
-            placeDigitArrayAt (ONE_, g, x, y); break;
-        /*case 2:
+            placeDigitArrayAt (ONE, g, x, y); break;
+        case 2:
             placeDigitArrayAt (TWO, g, x, y); break;
         case 3:
-            placeDigitArrayAt (THREE, g, x, y); break;*/
+            placeDigitArrayAt (THREE, g, x, y); break;
+        case 4:
+            placeDigitArrayAt (FOUR, g, x, y); break;
+        case 5:
+            placeDigitArrayAt (FIVE, g, x, y); break;
+        case 6:
+            placeDigitArrayAt (SIX, g, x, y); break;
+        case 7:
+            placeDigitArrayAt (SEVEN, g, x, y); break;
+        case 8:
+            placeDigitArrayAt (EIGHT, g, x, y); break;
+        case 9:
+            placeDigitArrayAt (NINE, g, x, y); break;
     }
 }
 

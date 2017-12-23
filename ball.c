@@ -217,6 +217,8 @@ void tickBall (ball *b) {
         nextTop = top + b->velY, nextBottom = bottom + b->velY;
     float nextX = b->x + b->velX, nextY = b->y + b->velY;
 
+    if (nextY <= getGridHeight (b->g)) {
+
     if (getTileAtWorld (b->g, nextX, b->y) != AIR) {
         b->velX *= -1;
         //if (getTileAtWorld (b->g, nextX, b->y) != WALL) setTileAtWorld (b->g, AIR, nextX, b->y);
@@ -226,6 +228,7 @@ void tickBall (ball *b) {
         b->velY *= -1;
         printf ("deleting %d %d\n", b->x, nextY);
         if (getTileAtWorld (b->g, b->x, nextY) != WALL) setTileAtWorld (b->g, AIR, (int) b->x, (int) nextY);
+    }
     }
 
     //if (isWithinGrid (b->g, b->x, nextTop) && getTileAtWorld (b->g, nextLeft, nextTop) != AIR) b->velX *= -1;
@@ -242,6 +245,7 @@ void tickBall (ball *b) {
     if (checkPaddleCollision (b)) onPaddleCollide (b);
 
     move (b);
+
 }
 
 

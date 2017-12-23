@@ -90,11 +90,13 @@ void getKeysDown (display *d, bool *keysDown) {
             if (sym == SDLK_LEFT) keysDown [LEFT] = true;
             if (sym == SDLK_RIGHT) keysDown [RIGHT] = true;
             if (sym == SDLK_ESCAPE) keysDown [ESCAPE] = true;
+            if (sym == SDLK_SPACE) keysDown [BALL] = true;
         } else if (event.type == SDL_KEYUP) {
             int sym = event.key.keysym.sym;
             if (sym == SDLK_LEFT) keysDown [LEFT] = false;
             if (sym == SDLK_RIGHT) keysDown [RIGHT] = false;
             if (sym == SDLK_ESCAPE) keysDown [ESCAPE] = false;
+            if (sym == SDLK_SPACE) keysDown [BALL] = false;
         }
     }
 }
