@@ -9,9 +9,11 @@
  *  STRUCTURES
  */
 struct grid {
-    uint8_t width, height;
+    int width, height, layers;
     TILE **map;
 };
+
+const int TOP_SPACE = 6;
 
 /*
  *  ERROR HANDLING
@@ -30,6 +32,27 @@ void gridOobCheck (grid *g, uint8_t x, uint8_t y) {
  *  GRID MANIPULATION
  */
 
+void populateGrid (grid *g, int startY, int layers) {
+    TILE colourCycle = BRICK_RED;
+    printf ("\n\nPOPULATE\n\n");
+    
+    for (int y = startY; y < startY + layers; y++) {
+        for (int i = 1; i < g->width - 1; i++) {
+            
+            g->map [i] [y] = colourCycle;
+
+        /*g->map [i] [startY] = BRICK_RED;
+        g->map [i] [startY + 1] = BRICK_ORG;
+        g->map [i] [startY + 2] = BRICK_YLW;
+        g->map [i] [startY + 3] = BRICK_GRN;
+        g->map [i] [startY + 4] = BRICK_BLU;*/
+        }
+
+        colourCycle = colourCycle <= BRICK_BLU
+            ? BRICK_RED : colourCycle - 1;
+    }
+}
+
 grid *newGrid (uint8_t width, uint8_t height) {
     grid *g = malloc (sizeof (g));
     g->width = width; g->height = height;
@@ -46,13 +69,9 @@ grid *newGrid (uint8_t width, uint8_t height) {
         }
     }
 
-    for (int i = 1; i < width - 1; i++) {
-        g->map [i] [7] = BRICK_RED;
-        g->map [i] [8] = BRICK_ORG;
-        g->map [i] [9] = BRICK_YLW;
-        g->map [i] [10] = BRICK_GRN;
-        g->map [i] [11] = BRICK_BLU;
-    }
+    g->layers = 6;
+
+    populateGrid (g, TOP_SPACE + 1, g->layers);
 
     return g;
 }
@@ -75,15 +94,19 @@ TILE getTileAtWorld (grid *g, uint8_t x, uint8_t y) {
     return getTileAt (g, x / getTileWidth (), y);   
 }
 
-uint8_t getTileWidth () {
+int getTileWidth () {
     return 4;
 }
 
-uint8_t getGridWidth (grid *g) {
+int getGridWidth (grid *g) {
     return g->width;
 }
 
-uint8_t getGridHeight (grid *g) {
+int getLayers (grid *g) {
+    return g->layers;
+}
+
+int getGridHeight (grid *g) {
     return g->height;
 }
 
@@ -105,11 +128,11 @@ void freeGrid (grid *g) {
  *  TESTING
  */
 int gridMain () {
-    grid *new = newGrid (20, 5);
+    grid *new = newGrid (20, 15);
     assert (new->width == 20);
-    assert (new->height == 5);
+    assert (new->height == 15);
     
-    assert (getTileAt (new, 0, 0) == WALL);
+    assert (getTileAt (new, 0, TOP_SPACE) == WALL);
     assert (getTileAt (new, 10, 3) == AIR);
     assert (getTileAt (new, 9, 2) == AIR);
 

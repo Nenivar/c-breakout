@@ -9,13 +9,15 @@ enum TILE {
 };
 typedef enum TILE TILE;
 
+extern const int TOP_SPACE;
 
-// 2D array of uint8_t
+// 2D array of int
 struct grid;
 typedef struct grid grid;
 
 // create a new grid with a given width & height
-// starts filled with AIR & a wall
+// min grid height & width = ()
+// starts filled with AIR, a wall, and some bricks
 grid *newGrid (uint8_t width, uint8_t height);
 // safely deletes a given grid
 void freeGrid (grid *g);
@@ -30,11 +32,13 @@ TILE getTileAt (grid *g, uint8_t x, uint8_t y);
 TILE getTileAtWorld (grid *g, uint8_t x, uint8_t y);
 
 // returns the width of one tile
-uint8_t getTileWidth ();
+int getTileWidth ();
 // returns the no. tiles in the x dir.
-uint8_t getGridWidth (grid *g);
+int getGridWidth (grid *g);
 // returns the no. tiles in the y dir.
-uint8_t getGridHeight (grid *g);
+int getGridHeight (grid *g);
+// returns the no. layers of bricks
+int getLayers (grid *g);
 
 // checks whether a given x, y pos. is inside the grid
 void gridOobCheck (grid *g, uint8_t x, uint8_t y);

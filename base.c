@@ -1,14 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-
 #include "base.h"
-/*
- *  UTIL
- */
-// returns the bigger of two numbers
-int max (int a, int b) {
-    return a > b ? a : b;
-}
 
 /*
  *  ERROR HANDLING

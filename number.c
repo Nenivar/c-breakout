@@ -127,14 +127,11 @@ void placeNumberAt (uint8_t num, grid *g, uint8_t x, uint8_t y) {
     } else {
         while (num > 0) {
             digits [c] = num % 10;
-            printf ("%d\n", num % 10);
             num /= 10;
             c++;
         }
     }
-    printf ("\n");
     for (int i = 0; i < c; i++) placeDigitAt (digits [i], g, x + (NUM_WIDTH + 1) * (c - i - 1), y);//printf ("i%d:%d,", i, digits [i]);
-    printf ("\n");
 }
 
 /*

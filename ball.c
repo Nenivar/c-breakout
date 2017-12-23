@@ -31,7 +31,9 @@ ball *newBall (grid *g, paddle *p) {
 
     ball *b = malloc (sizeof (ball));
     b->x = (getGridWidth (g) * getTileWidth () - BALL_DIM) / 2;
-    b->y = getGridHeight (g) / 2;
+    //b->y = getGridHeight (g) / 2;
+    printf ("layers:%d,space:%d\n", getLayers (g), TOP_SPACE);
+    b->y = getLayers (g) + TOP_SPACE + 1;
     b->speed = 0.6f;
     b->velX = ((rand () % 200) - 100) / 100.0f * b->speed;
     b->velY = b->speed;
