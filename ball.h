@@ -1,12 +1,11 @@
-#include <stdint.h>
-
 #include "paddle.h"
 
 // ball structure with movement variables
 struct ball;
 typedef struct ball ball;
 
-// creates a new ball in the center of the grid
+// creates a new ball below breakable blocks
+// with a randomized angle
 ball *newBall (grid *g, paddle *p);
 // safely removes a ball
 void freeBall (ball *b);
@@ -20,6 +19,9 @@ float getBallY (ball *b);
 float getBallVelX (ball *b);
 // returns the vert. vel. of the ball
 float getBallVelY (ball *b);
+
+// returns the speed of the ball
+float getBallSpeed (ball *b);
 
 // changes the pos. of the ball
 // according to it's velocity & collisions

@@ -12,7 +12,7 @@
 const float SCALE_X = 10;
 const float SCALE_Y = 10;
 const int GRID_W = 10;
-const int GRID_H = 25;
+const int GRID_H = 35;
 
 /*
  *  STRUCTURES
