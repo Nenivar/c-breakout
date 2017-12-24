@@ -41,6 +41,13 @@ TILE getTileAt (grid *g, int x, int y);
 // returns the tile at the given x, y world pos.
 TILE getTileAtWorld (grid *g, int x, int y);
 
+// returns the number of bricks broken by a ball
+int getBricksBroken (grid *g);
+// increases the number of bricks broken by a ball
+void increaseBricksBroken (grid *g);
+// returns the max number of breakable bricks
+int getMaxBreakableBricks (grid *g);
+
 // checks whether a given x, y pos. is inside the grid
 void gridOobCheck (grid *g, int x, int y);
 // returns whether a position is within a grid or not

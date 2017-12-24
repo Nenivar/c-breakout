@@ -7,7 +7,8 @@
  *  STRUCTURES
  */
 struct grid {
-    int width, height, layers;
+    int width, height, layers,
+        maxBreakable, bricksBroken;
     TILE **map;
 };
 
@@ -35,7 +36,7 @@ void populateGrid (grid *g, int startY, int layers) {
 
     for (int y = startY; y < startY + layers; y++) {
         for (int i = 1; i < g->width - 1; i++)
-            g->map [i] [y] = colourCycle;
+            g->map [i] [y] = colourCycle;       
 
         colourCycle = colourCycle <= BRICK_BLU
             ? BRICK_RED : colourCycle - 1;
@@ -52,8 +53,10 @@ void wallGrid (grid *g, int startY) {
 }
 
 grid *newGrid (int width, int height, int layers) {
-    grid *g = malloc (sizeof (g));
+    grid *g = malloc (sizeof (g) + sizeof (TILE) * width * 2);
+    
     g->width = width; g->height = height;
+    g->maxBreakable = layers * (width - 2); g->bricksBroken = 0;
 
     g->map = malloc (sizeof (TILE) * width * 2);
     for (int i = 0; i < width; i++)
@@ -84,6 +87,18 @@ void setTileAt (grid *g, TILE tile, int x, int y) {
 
 void setTileAtWorld (grid *g, TILE tile, int x, int y) {
     setTileAt (g, tile, x / getTileWidth (), y);
+}
+
+int getBricksBroken (grid *g) {
+    return g->bricksBroken;
+}
+
+void increaseBricksBroken (grid *g) {
+    g->bricksBroken++;
+}
+
+int getMaxBreakableBricks (grid *g) {
+    return g->maxBreakable;
 }
 
 TILE getTileAt (grid *g, int x, int y) {

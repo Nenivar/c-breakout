@@ -114,8 +114,10 @@ static bool checkGridXCollision (ball *b) {
 static void onGridXCollide (ball *b) {
     float nextX = b->x + b->velX;
     b->velX *= -1;
-    if (getTileAtWorld (b->g, nextX, b->y) != WALL)
+    if (getTileAtWorld (b->g, nextX, b->y) != WALL) {
         setTileAtWorld (b->g, AIR, (int) nextX, (int) b->y);
+        increaseBricksBroken (b->g);
+    }
 }
 
 // checks whether a ball is going to collide with the top/bottom of a (non-air) tile
@@ -129,8 +131,10 @@ static bool checkGridYCollision (ball *b) {
 static void onGridYCollide (ball *b) {
     float nextY = b->y + b->velY;
     b->velY *= -1;
-    if (getTileAtWorld (b->g, b->x, nextY) != WALL)
+    if (getTileAtWorld (b->g, b->x, nextY) != WALL) {
         setTileAtWorld (b->g, AIR, (int) b->x, (int) nextY);
+        increaseBricksBroken (b->g);
+    }
 }
 
 // checks for collisions with the grid & paddle
