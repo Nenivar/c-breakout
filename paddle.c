@@ -60,7 +60,7 @@ int paddleMain () {
     grid *g = newGrid (25, 10, 0);
     paddle *p = newPaddle (g);
 
-    uint8_t startX = (25 - PADDLE_WIDTH) / 2;
+    uint8_t startX = (getGridWidth (g) * getTileWidth () - PADDLE_WIDTH) / 2;
 
     assert (getPaddleX (p) == startX);
     movePaddle (p, -1);

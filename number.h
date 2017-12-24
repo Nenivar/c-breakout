@@ -1,6 +1,4 @@
-#include <stdbool.h>
-#include <stdint.h>
-
 #include "grid.h"
 
-void placeNumberAt (uint8_t num, grid *g, uint8_t x, uint8_t y);
+// places a number at a given pos. on a grid
+void placeNumberAt (int num, grid *g, int x, int y);

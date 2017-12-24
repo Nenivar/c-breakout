@@ -2,8 +2,8 @@
 
 #include "number.h"
 
-const uint8_t NUM_HEIGHT = 5;
-const uint8_t NUM_WIDTH = 4;
+const int NUM_HEIGHT = 5;
+const int NUM_WIDTH = 4;
 
 const TILE ZERO [5] [4] = {
     {1,1,1,1},
@@ -77,14 +77,14 @@ const TILE NINE [5] [4] = {
 };
 
 // places a 2D array of TILE into a grid at an (x, y) pos.
-static void placeDigitArrayAt (const TILE array [NUM_HEIGHT] [NUM_WIDTH], grid *g, uint8_t x, uint8_t y) {
+static void placeDigitArrayAt (const TILE array [NUM_HEIGHT] [NUM_WIDTH], grid *g, int x, int y) {
     for (int yy = 0; yy < NUM_WIDTH; yy++)
         for (int xx = 0; xx < NUM_HEIGHT; xx++)
             setTileAt (g, array [xx] [yy], yy + x, xx + y);
 }
 
 // maps digits to 2D arrays
-static void placeDigitAt (uint8_t digit, grid *g, uint8_t x, uint8_t y) {
+static void placeDigitAt (int digit, grid *g, int x, int y) {
     switch (digit) {
         case 0:
             placeDigitArrayAt (ZERO, g, x, y); break;
@@ -109,7 +109,7 @@ static void placeDigitAt (uint8_t digit, grid *g, uint8_t x, uint8_t y) {
     }
 }
 
-void placeNumberAt (uint8_t num, grid *g, uint8_t x, uint8_t y) {
+void placeNumberAt (int num, grid *g, int x, int y) {
     int digits [10], c = 0;
 
     if (num == 0) {

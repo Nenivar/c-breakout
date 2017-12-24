@@ -18,7 +18,7 @@ typedef struct grid grid;
 // create a new grid with a given width & height
 // min grid height & width = ()
 // starts filled with AIR, a wall, and some bricks
-grid *newGrid (uint8_t width, uint8_t height, int layers);
+grid *newGrid (int width, int height, int layers);
 // safely deletes a given grid
 void freeGrid (grid *g);
 
@@ -33,15 +33,15 @@ int getGridHeight (grid *g);
 int getLayers (grid *g);
 
 // set a tile to a type at the given x, y pos.
-void setTileAt (grid *g, TILE tile, uint8_t x, uint8_t y);
+void setTileAt (grid *g, TILE tile, int x, int y);
 // set a tile to a type at the given x, y world pos.
-void setTileAtWorld (grid *g, TILE tile ,uint8_t x, uint8_t y);
+void setTileAtWorld (grid *g, TILE tile ,int x, int y);
 // returns the tile at the given x, y pos.
-TILE getTileAt (grid *g, uint8_t x, uint8_t y);
+TILE getTileAt (grid *g, int x, int y);
 // returns the tile at the given x, y world pos.
-TILE getTileAtWorld (grid *g, uint8_t x, uint8_t y);
+TILE getTileAtWorld (grid *g, int x, int y);
 
 // checks whether a given x, y pos. is inside the grid
-void gridOobCheck (grid *g, uint8_t x, uint8_t y);
+void gridOobCheck (grid *g, int x, int y);
 // returns whether a position is within a grid or not
-bool isWithinGrid (grid *g, uint8_t x, uint8_t y);
+bool isWithinGrid (grid *g, int x, int y);

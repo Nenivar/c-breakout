@@ -1,9 +1,5 @@
 #include "number.h"
 
-extern const float PADDLE_WIDTH;
-extern const float PADDLE_HEIGHT;
-extern const float PADDLE_Y;
-
 // paddle which user controls to hit the ball
 // has a fixed position near the bottom of the grid
 struct paddle;

@@ -1,7 +1,5 @@
 #include <assert.h>
 #include <malloc.h>
-#include <stdbool.h>
-#include <stdint.h>
 
 #include "grid.h"
 
@@ -18,7 +16,7 @@ const int TOP_SPACE = 6;
 /*
  *  ERROR HANDLING
  */
-void gridOobCheck (grid *g, uint8_t x, uint8_t y) {
+void gridOobCheck (grid *g, int x, int y) {
     if (!isWithinGrid (g, x, y)) {
         char error [50];
         sprintf (error, "Grid position (%d, %d) out of bounds (%d, %d)!",
@@ -53,7 +51,7 @@ void wallGrid (grid *g, int startY) {
     }
 }
 
-grid *newGrid (uint8_t width, uint8_t height, int layers) {
+grid *newGrid (int width, int height, int layers) {
     grid *g = malloc (sizeof (g));
     g->width = width; g->height = height;
 
@@ -79,21 +77,21 @@ void freeGrid (grid *g) {
     free (g);
 }
 
-void setTileAt (grid *g, TILE tile, uint8_t x, uint8_t y) {
+void setTileAt (grid *g, TILE tile, int x, int y) {
     gridOobCheck (g, x, y);
     g->map [x] [y] = tile;
 }
 
-void setTileAtWorld (grid *g, TILE tile, uint8_t x, uint8_t y) {
+void setTileAtWorld (grid *g, TILE tile, int x, int y) {
     setTileAt (g, tile, x / getTileWidth (), y);
 }
 
-TILE getTileAt (grid *g, uint8_t x, uint8_t y) {
+TILE getTileAt (grid *g, int x, int y) {
     gridOobCheck (g, x, y);
     return g->map [x] [y];
 }
 
-TILE getTileAtWorld (grid *g, uint8_t x, uint8_t y) {
+TILE getTileAtWorld (grid *g, int x, int y) {
     return getTileAt (g, x / getTileWidth (), y);   
 }
 
@@ -109,12 +107,12 @@ int getLayers (grid *g) {
     return g->layers;
 }
 
-bool isWithinGrid (grid *g, uint8_t x, uint8_t y) {
+bool isWithinGrid (grid *g, int x, int y) {
     return x >= 0 && x < g->width
         && y >= 0 && y < g->height;
 }
 
-bool isWithinGridWorld (grid *g, uint8_t x, uint8_t y) {
+bool isWithinGridWorld (grid *g, int x, int y) {
     return isWithinGridWorld (g, x / getTileWidth (), y);
 }
 
