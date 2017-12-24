@@ -148,7 +148,7 @@ int main (int n, char *args [n]) {
 
     bool keysDown [KEY_NO];
     for (int i = 0; i < KEY_NO; i++) keysDown [i] = false;
-    while (keysDown [ESCAPE]) {
+    while (!keysDown [ESCAPE]) {
         drawGame (gm, d);
         tickGame (gm);
 
