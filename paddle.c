@@ -1,6 +1,5 @@
 #include <assert.h>
 #include <malloc.h>
-#include <stdint.h>
 
 #include "paddle.h"
 
@@ -60,25 +59,19 @@ int paddleMain () {
     grid *g = newGrid (25, 10, 0);
     paddle *p = newPaddle (g);
 
-    uint8_t startX = (getGridWidth (g) * getTileWidth () - PADDLE_WIDTH) / 2;
+    float startX = (getGridWidth (g) * getTileWidth () - PADDLE_WIDTH) / 2;
 
     assert (getPaddleX (p) == startX);
     movePaddle (p, -1);
     assert (getPaddleX (p) == startX - 1);
-    movePaddle (p, -startX + 1);
-    assert (getPaddleX (p) == 0);
+    movePaddle (p, getTileWidth () - startX + 1);
+    assert (getPaddleX (p) == getTileWidth ());
     movePaddle (p, -3);
-    assert (getPaddleX (p) == 0);
+    assert (getPaddleX (p) == getTileWidth ());
     movePaddle (p, 10);
-    assert (getPaddleX (p) == 10);
+    assert (getPaddleX (p) == getTileWidth () + 10);
     movePaddle (p, 100);
-    assert (getPaddleX (p) == 10);
-    movePaddle (p, -10);
-    assert (getPaddleX (p) == 0);
-    movePaddle (p, getGridWidth (g) - PADDLE_WIDTH - 1);
-    assert (getPaddleX (p) == getGridWidth (g) - PADDLE_WIDTH - 1);
-    movePaddle (p, 1);
-    assert (getPaddleX (p) == getGridWidth (g) - PADDLE_WIDTH - 1);
+    assert (getPaddleX (p) == getTileWidth () + 10);
 
     freePaddle (p);
     succeed ("Paddle module OK");

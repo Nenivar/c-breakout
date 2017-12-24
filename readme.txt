@@ -19,6 +19,7 @@ Number:
 2D arrays for each digit are stored and used to display numbers on a grid. I could have used a truetype font instead but this method is a bit easier.
 
 Paddle:
+Structure for the paddle, which can only move between certain bounds in the horizontal direction.
 
 Ball:
 

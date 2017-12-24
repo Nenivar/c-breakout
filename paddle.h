@@ -5,7 +5,7 @@
 struct paddle;
 typedef struct paddle paddle;
 
-// creates a new paddle in the middle of the grid
+// creates a new paddle in the middle bottom of the grid
 paddle *newPaddle (grid *g);
 // safely removes the paddle
 void freePaddle ();
